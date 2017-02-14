@@ -21,4 +21,4 @@
   when: (httpd_exists.stdout == '1')
 
 - name: run composer-install script
-  script: creates="/usr/sbin/composer" roles/common/files/composer-install.sh
+  script: creates="/usr/sbin/composer" files/composer-install.sh

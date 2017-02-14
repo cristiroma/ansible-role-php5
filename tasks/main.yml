@@ -20,5 +20,9 @@
   service: name=httpd state=reloaded enabled=yes
   when: (httpd_exists.stdout == '1')
 
+- name: install support tools
+  yum: name={{ item }} state=present
+  with_items: [ git, wget ]
+
 - name: run composer-install script
   script: creates="/usr/sbin/composer" files/composer-install.sh

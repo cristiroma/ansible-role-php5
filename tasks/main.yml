@@ -1,0 +1,24 @@
+---
+- name: detect apache
+  shell:
+    'ls /etc/init.d/ | grep httpd | wc -l'
+  register:
+    httpd_exists
+
+- name: install webtatic repos
+  yum: name=https://mirror.webtatic.com/yum/el7/webtatic-release.rpm state=installed validate_certs=False
+
+- name: install PHP and libs from webtatic
+  yum: name={{ item }} state=installed
+  with_items: "{{ php_packages }}"
+
+- name: Configure PHP
+  ini_file: dest=/etc/php.ini option={{ item.option }} value={{ item.value }} section={{ item.section }}
+  with_items: "{{ php_ini_variables }}"
+
+- name: reload web server
+  service: name=httpd state=reloaded enabled=yes
+  when: (httpd_exists.stdout == '1')
+
+- name: run composer-install script
+  script: creates="/usr/sbin/composer" roles/common/files/composer-install.sh

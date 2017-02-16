@@ -1,19 +1,18 @@
 ---
 - name: detect apache
-  shell:
-    'ls /etc/init.d/ | grep httpd | wc -l'
+  stat: path="/etc/init.d/httpd"
   register:
     httpd_exists
 
 - name: install webtatic repos
-  yum: name=https://mirror.webtatic.com/yum/el7/webtatic-release.rpm state=installed validate_certs=False
+  yum: name="https://mirror.webtatic.com/yum/el7/webtatic-release.rpm" state="installed" validate_certs="false"
 
 - name: install PHP and libs from webtatic
-  yum: name={{ item }} state=installed
+  yum: name="{{ item }}" state="installed"
   with_items: "{{ php_packages }}"
 
-- name: Configure PHP
-  ini_file: dest=/etc/php.ini option={{ item.option }} value={{ item.value }} section={{ item.section }}
+- name: configure php
+  ini_file: dest="/etc/php.ini" option="{{ item.option }}" value="{{ item.value }}" section="{{ item.section }}"
   with_items: "{{ php_ini_variables }}"
 
 - name: disable php.ini variables
@@ -21,12 +20,12 @@
   with_items: "{{ php_ini_variables_disabled }}"
 
 - name: reload web server
-  service: name=httpd state=reloaded enabled=yes
-  when: (httpd_exists.stdout == '1')
+  service: name="httpd" state="reloaded" enabled="yes"
+  when: (httpd_exists.stat.exists == True)
 
 - name: install support tools
-  yum: name={{ item }} state=present
-  with_items: [ git, wget ]
+  yum: name="{{ item }}" state="present"
+  with_items: [ "git", "wget" ]
 
 - name: run composer-install script
   script: creates="/usr/sbin/composer" files/composer-install.sh

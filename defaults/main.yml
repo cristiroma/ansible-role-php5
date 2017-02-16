@@ -6,6 +6,9 @@ php_packages: [ php56w, php56w-cli, php56w-devel, php56w-pear,
   php56w-opcache, php56w-mcrypt, php56w-mysql, php56w-ldap ]
 
 php_ini_variables:
+  - { option: "allow_url_fopen" , value: "Off" , section: "PHP" }
+  - { option: "assert.active" , value: "Off" , section: "PHP" }
+  - { option: "session.use_strict_mode" , value: "Off" , section: "PHP" }
   - { option: "max_execution_time" , value: "60" , section: "PHP" }
   - { option: "memory_limit" , value: "1024M" , section: "PHP" }
   - { option: "error_reporting" , value: "E_ALL & ~E_DEPRECATED & ~E_STRICT" , section: "PHP" }
@@ -16,3 +19,7 @@ php_ini_variables:
   - { option: "max_file_uploads" , value: "10" , section: "PHP" }
   - { option: "date.timezone" , value: "Europe/Bucharest" , section: "PHP" }
   - { option: "expose_php" , value: "Off" , section: "PHP" }
+  - { option: "session.use_strict_mode" , value: "On" , section: "Session" }
+
+php_ini_variables_disabled:
+  - { option: "mail.add_x_header", section: "mail function" }

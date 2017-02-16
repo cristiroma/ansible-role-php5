@@ -16,6 +16,10 @@
   ini_file: dest=/etc/php.ini option={{ item.option }} value={{ item.value }} section={{ item.section }}
   with_items: "{{ php_ini_variables }}"
 
+- name: disable php.ini variables
+  ini_file: dest="/etc/php.ini" option="{{ item.option }}" section="{{ item.section }}" state="absent"
+  with_items: "{{ php_ini_variables_disabled }}"
+
 - name: reload web server
   service: name=httpd state=reloaded enabled=yes
   when: (httpd_exists.stdout == '1')

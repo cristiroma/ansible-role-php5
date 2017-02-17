@@ -11,15 +11,15 @@
   yum: name="{{ item }}" state="installed"
   with_items: "{{ php_packages }}"
 
-- name: configure php
+- name: configure php.ini defaults
+  ini_file: dest="/etc/php.ini" option="{{ item.option }}" value="{{ item.value }}" section="{{ item.section }}" state="present"
+  with_items: "{{ php_ini_variables_defaults }}"
+
+- name: add options to php.ini
   ini_file: dest="/etc/php.ini" option="{{ item.option }}" value="{{ item.value }}" section="{{ item.section }}" state="present"
   with_items: "{{ php_ini_variables }}"
 
-- name: extra php configuration
-  ini_file: dest="/etc/php.ini" option="{{ item.option }}" value="{{ item.value }}" section="{{ item.section }}" state="present"
-  with_items: "{{ php_ini_variables_extra }}"
-
-- name: remove php configuration settings
+- name: remove options from php.ini
   lineinfile: dest="/etc/php.ini" regexp="^;?{{ item }}" state="absent"
   with_items: "{{ php_ini_variables_remove }}"
 

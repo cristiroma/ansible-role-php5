@@ -12,12 +12,16 @@
   with_items: "{{ php_packages }}"
 
 - name: configure php
-  ini_file: dest="/etc/php.ini" option="{{ item.option }}" value="{{ item.value }}" section="{{ item.section }}"
+  ini_file: dest="/etc/php.ini" option="{{ item.option }}" value="{{ item.value }}" section="{{ item.section }}" state="present"
   with_items: "{{ php_ini_variables }}"
 
-- name: disable php.ini variables
-  ini_file: dest="/etc/php.ini" option="{{ item.option }}" section="{{ item.section }}" state="absent"
-  with_items: "{{ php_ini_variables_disabled }}"
+- name: extra php configuration
+  ini_file: dest="/etc/php.ini" option="{{ item.option }}" value="{{ item.value }}" section="{{ item.section }}" state="present"
+  with_items: "{{ php_ini_variables_extra }}"
+
+- name: remove php configuration settings
+  lineinfile: dest="/etc/php.ini" regexp="^;?{{ item }}" state="absent"
+  with_items: "{{ php_ini_variables_remove }}"
 
 - name: reload web server
   service: name="httpd" state="reloaded" enabled="yes"

@@ -6,20 +6,20 @@ php_packages: [ php56w, php56w-cli, php56w-devel, php56w-pear,
   php56w-opcache, php56w-mcrypt, php56w-mysql, php56w-ldap ]
 
 php_ini_variables:
-  - { option: "allow_url_fopen" , value: "Off" , section: "PHP" }
-  - { option: "assert.active" , value: "Off" , section: "PHP" }
-  - { option: "session.use_strict_mode" , value: "Off" , section: "PHP" }
-  - { option: "max_execution_time" , value: "60" , section: "PHP" }
-  - { option: "memory_limit" , value: "1024M" , section: "PHP" }
-  - { option: "error_reporting" , value: "E_ALL & ~E_DEPRECATED & ~E_STRICT" , section: "PHP" }
-  - { option: "display_errors" , value: "Off" , section: "PHP" }
-  - { option: "error_log" , value: "syslog" , section: "PHP" }
-  - { option: "post_max_size" , value: "64M" , section: "PHP" }
-  - { option: "upload_max_filesize" , value: "32M" , section: "PHP" }
-  - { option: "max_file_uploads" , value: "10" , section: "PHP" }
-  - { option: "date.timezone" , value: "Europe/Bucharest" , section: "PHP" }
-  - { option: "expose_php" , value: "Off" , section: "PHP" }
-  - { option: "session.use_strict_mode" , value: "On" , section: "Session" }
+  - { option: "error_reporting",          section: "PHP",     state: "present",    value: "E_ALL & ~E_DEPRECATED & ~E_STRICT" }
+  - { option: "display_errors",           section: "PHP",     state: "present",    value: "Off" }
+  - { option: "error_log",                section: "PHP",     state: "present",    value: "syslog" }
+  - { option: "date.timezone",            section: "PHP",     state: "present",    value: "Europe/Bucharest" }
+  - { option: "expose_php",               section: "PHP",     state: "present",    value: "Off" }
+  - { option: "allow_url_fopen",          section: "PHP",     state: "present",    value: "Off" }
+  - { option: "assert.active",            section: "PHP",     state: "present",    value: "Off" }
+  - { option: "session.use_strict_mode",  section: "Session", state: "present",    value: "On" }
+  - { option: "max_execution_time",       section: "PHP",     state: "present",    value: "60" }
+  - { option: "memory_limit",             section: "PHP",     state: "present",    value: "1024M" }
+  - { option: "post_max_size",            section: "PHP",     state: "present",    value: "64M" }
+  - { option: "upload_max_filesize",      section: "PHP",     state: "present",    value: "32M" }
+  - { option: "max_file_uploads",         section: "PHP",     state: "present",    value: "10" }
 
-php_ini_variables_disabled:
-  - { option: "mail.add_x_header", section: "mail function" }
+php_ini_variables_extra: []
+# ansible ini_file not properly comments lines https://github.com/ansible/ansible/issues/21578
+php_ini_variables_remove: [ "mail.add_x_header" ]

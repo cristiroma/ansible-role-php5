@@ -1,6 +1,6 @@
 ---
 - name: detect apache
-  stat: path="/etc/init.d/httpd"
+  stat: path="/usr/lib/systemd/system/httpd.service"
   register:
     httpd_exists
 
